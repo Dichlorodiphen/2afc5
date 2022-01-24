@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sand at Sunset Beach
+* source:	https://sketchfab.com/3d-models/sand-at-sunset-beach-1ac0847acae44ffe9c3783be28e82bcf
+* author:	Terrie Simmons-Ehrhardt (https://sketchfab.com/terrielsimmons)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sand at Sunset Beach" (https://sketchfab.com/3d-models/sand-at-sunset-beach-1ac0847acae44ffe9c3783be28e82bcf) by Terrie Simmons-Ehrhardt (https://sketchfab.com/terrielsimmons) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
