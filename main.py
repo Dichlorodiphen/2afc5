@@ -53,8 +53,8 @@ def generateTerrainAndObjects():
 	beach.texture(sand)
 	
 	# Generate objects
-	POLE_HEIGHT = 4
-	POLE_RADIUS = 0.25
+	POLE_HEIGHT = 1.3
+	POLE_RADIUS = 0.35
 	comp_texture = viz.addTexture('./textures/stone.jpg')
 	adj_texture = viz.addTexture('./textures/stone2.jpg')
 	
