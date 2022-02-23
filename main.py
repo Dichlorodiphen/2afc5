@@ -7,6 +7,8 @@ import os
 from enum import Enum
 import random
 import time
+import questplus as qp
+import numpy as np
 
 
 class Terrain(Enum):
@@ -23,6 +25,42 @@ class Position(Enum):
 	RIGHT = 1
 	
 	
+STAR_HEIGHT = 10
+
+# xyz coordinates for star positions
+STAR_POSITIONS = dict([
+	(Terrain.SAND_FIRM, [0, STAR_HEIGHT, -20]),
+	(Terrain.SAND_SAND, [20, STAR_HEIGHT, 0]),
+	(Terrain.FIRM_FIRM, [-20, STAR_HEIGHT, 0]),
+	(Terrain.FIRM_SAND, [0, STAR_HEIGHT, 20])
+])
+
+# quaternions for orientation of star
+STAR_ORIENTATIONS = dict([
+	(Terrain.SAND_FIRM, [0, 1, 0, 0]),
+	(Terrain.SAND_SAND, [0, 1, 0, 1]),
+	(Terrain.FIRM_FIRM, [0, 1, 0, 1]),
+	(Terrain.FIRM_SAND, [0, 1, 0, 0])
+])
+
+
+POLE_HEIGHT = 1
+	
+STANDARD_POSITIONS = dict([
+	(Terrain.SAND_FIRM, [2, POLE_HEIGHT, -5]),
+	(Terrain.SAND_SAND, [5, POLE_HEIGHT, 2]),
+	(Terrain.FIRM_FIRM, [-5, POLE_HEIGHT, 2]),
+	(Terrain.FIRM_SAND, [2, POLE_HEIGHT, 5])
+])
+
+COMPARISON_POSITIONS = dict([
+	(Terrain.SAND_FIRM, [-2, POLE_HEIGHT, -5]),
+	(Terrain.SAND_SAND, [5, POLE_HEIGHT, -2]),
+	(Terrain.FIRM_FIRM, [-5, POLE_HEIGHT, -2]),
+	(Terrain.FIRM_SAND, [-2, POLE_HEIGHT, 5])
+])
+	
+	
 class Experiment:
 	"""A class that encapsulates an experiment and its adaptive staircase."""	
 	def __init__(self, terrain, standard_position, distance, quest):
@@ -30,17 +68,63 @@ class Experiment:
 		self.standard_position = standard_position
 		self.distance = distance 
 		self.quest = quest
+		self.trials = 5
+		self.star = None
+		self.comparison_pole = None
+		self.standard_pole = None
+		
+		
+	def setup(self, stimulus):
+		"""Sets up the scene with the comparison pole at the specified distance."""
+		# Display star
+		self.star = viz.add('./models/star/scene.gltf')
+		self.star.setPosition(STAR_POSITIONS[self.terrain])
+		self.star.setQuat(STAR_ORIENTATIONS[self.terrain])
+		
+		# Display poles
+		POLE_HEIGHT = 1.3
+		POLE_RADIUS = 0.35
+		blue_texture = viz.addTexture('./textures/blue_granite.jpg')
+		blue_texture.wrap(viz.WRAP_T, viz.REPEAT)
+		blue_texture.wrap(viz.WRAP_S, viz.REPEAT)
+		self.standard_pole = vizshape.addCylinder(POLE_HEIGHT, POLE_RADIUS)
+		self.comparison_pole = vizshape.addCylinder(POLE_HEIGHT, POLE_RADIUS)
+		self.standard_pole.texture(blue_texture)
+		self.comparison_pole.texture(blue_texture)
+		self.standard_pole.setPosition(STANDARD_POSITIONS[self.terrain])
+		self.comparison_pole.setPosition(COMPARISON_POSITIONS[self.terrain])
+		
+		
+	def teardown(self):
+		"""Clean up all objects associated with a run of experiment."""
+		self.star.remove()
+		self.comparison_pole.remove()
+		self.standard_pole.remove()
 		
 	
 	def hasNext(self):
 		"""Returns whether or not the current experiment is unfinished."""
-		return True
+		return not (self.trials <= 0)
+		
+	
+	def next(self):
+		"""Returns the next stimulus."""
+		print(self.quest.marginal_posterior)
+		return self.quest.next_stim
 		
 		
-	def run(self):
-		pass
+	def update(self, stimulus, outcome):
+		"""Update the staircase with a stimulus-response pair."""
+		self.trials -= 1
+		q.update(stim=stimulus, outcome=outcome)
+		
+	
+	def estimate(self):
+		"""Returns the final parameter estimates."""
+		return self.quest.param_estimate
+		
 
-def generateTerrainAndObjects():
+def generateTerrain():
 	# Sky
 	viz.clearcolor(0, 0.4, 1.0)
 
@@ -88,57 +172,61 @@ def generateTerrainAndObjects():
 	sand.wrap(viz.WRAP_S, viz.REPEAT)
 	beach.texture(sand)
 	
-	# Generate objects
-	POLE_HEIGHT = 1.3
-	POLE_RADIUS = 0.35
 	
-	## Textures
-	blue_texture = viz.addTexture('./textures/blue_granite.jpg')
-	blue_texture.wrap(viz.WRAP_T, viz.REPEAT)
-	blue_texture.wrap(viz.WRAP_S, viz.REPEAT)
-	red_texture = viz.addTexture('./textures/red_granite.jpg')
-	red_texture.wrap(viz.WRAP_T, viz.REPEAT)
-	red_texture.wrap(viz.WRAP_S, viz.REPEAT)
+def initQuest() -> qp.QuestPlus:
+	"""Initialize and return a QuestPlus staircase."""
+	# Stimulus domain
+	distances = np.arange(start=3, stop=15, step=0.05)
+	stim_domain = dict(intensity=distances)
 	
-	## Generate blue standard and comparison poles
-	blue_standard_pole = vizshape.addCylinder(POLE_HEIGHT, POLE_RADIUS)
-	blue_comparison_pole = vizshape.addCylinder(POLE_HEIGHT, POLE_RADIUS)
-	blue_standard_pole.texture(blue_texture)
-	blue_comparison_pole.texture(blue_texture)
+	# Parameter domain
+	thresholds = distances.copy() # threshold (free parameter)
+	slope = 1 # slope (fixed parameter)
+	guess_rate = 0.5 # guess rate (fixed parameter)
+	lapse_rate = 0.01 # lapse rate (fixed parameter)
+	param_domain = dict(threshold=thresholds,
+		slope=slope,
+		lower_asymptote=guess_rate,
+		lapse_rate=lapse_rate)
 	
-	### Generate red pole
-	#adjustable_pole = vizshape.addCylinder(POLE_HEIGHT, POLE_RADIUS)
-	#adjustable_pole.texture(red_texture)
+	# Response domain
+	responses = [Position.LEFT, Position.RIGHT]
+	outcome_domain = dict(response=responses)
 	
-	## Set pole positions
-	blue_standard_pole.setPosition(2, 1, 5)
-	blue_comparison_pole.setPosition(-2, 1, 5)
+	# Misc parameters
+	func = 'weibull'
+	stim_scale = 'log10'
+	stim_selection_method = 'min_entropy'
+	param_estimation_method = 'mean'
 	
-	## Generate star
-	star = viz.add('./models/star/scene.gltf')
-	star.setPosition(0, 10, 20)
+	# Init staircase
+	staircase = qp.QuestPlus(stim_domain=stim_domain,
+		func=func,
+		stim_scale=stim_scale,
+		param_domain=param_domain,
+		outcome_domain=outcome_domain,
+		stim_selection_method=stim_selection_method,
+		param_estimation_method=param_estimation_method)
+	
+	return staircase
 	
 	
 def runExperiments():
 	"""Run each experiment until all are finished."""
-	# Initialize QUEST+
-	
 	# Initialize experiments
 	experiments = []
 	distances = [7, 9, 11]
-	count = 0
 	for i in range(0, 2):
 		for terrain in Terrain:
 			for standard_position in Position:
 				for distance in distances:
-					quest = count ## TODO: change this
-					count += 1
+					quest = initQuest()
 					current = Experiment(terrain, standard_position, distance, quest)
 					experiments.append(current)
 	
 	done = False
 	while (not done):
-		yield viztask.waitTime(1)
+		yield viztask.waitTime(4)
 		# Check if all staircases exhausted
 		done = True
 		for e in experiments:
@@ -157,6 +245,9 @@ def runExperiments():
 		
 		
 		# Perform experiment
+		experiment.setup(1)
+		yield viztask.waitTime(3)
+		experiment.teardown()
 		print(experiment.quest)
 
 
@@ -185,8 +276,8 @@ def main():
 	file.close()
 	"""
 	
-	# Load models / textures
-	generateTerrainAndObjects()
+	# Load terrain
+	generateTerrain()
 	
 	# Proceed until all staircases exhausted
 	experiment_runner = viztask.schedule(runExperiments())
