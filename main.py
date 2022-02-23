@@ -9,6 +9,7 @@ import random
 import time
 import questplus as qp
 import numpy as np
+import warnings
 
 
 class Terrain(Enum):
@@ -43,35 +44,33 @@ STAR_ORIENTATIONS = dict([
 	(Terrain.FIRM_SAND, [0, 1, 0, 0])
 ])
 
-
-POLE_HEIGHT = 1
-	
-STANDARD_POSITIONS = dict([
-	(Terrain.SAND_FIRM, [2, POLE_HEIGHT, -5]),
-	(Terrain.SAND_SAND, [5, POLE_HEIGHT, 2]),
-	(Terrain.FIRM_FIRM, [-5, POLE_HEIGHT, 2]),
-	(Terrain.FIRM_SAND, [2, POLE_HEIGHT, 5])
+RIGHT_ROTATIONS = dict([
+	(Terrain.SAND_FIRM, 210),
+	(Terrain.SAND_SAND, 120),
+	(Terrain.FIRM_FIRM, 300),
+	(Terrain.FIRM_SAND, 30)
 ])
 
-COMPARISON_POSITIONS = dict([
-	(Terrain.SAND_FIRM, [-2, POLE_HEIGHT, -5]),
-	(Terrain.SAND_SAND, [5, POLE_HEIGHT, -2]),
-	(Terrain.FIRM_FIRM, [-5, POLE_HEIGHT, -2]),
-	(Terrain.FIRM_SAND, [-2, POLE_HEIGHT, 5])
+LEFT_ROTATIONS = dict([
+	(Terrain.SAND_FIRM, 150),
+	(Terrain.SAND_SAND, 60),
+	(Terrain.FIRM_FIRM, 240),
+	(Terrain.FIRM_SAND, -30)
 ])
 	
 	
 class Experiment:
 	"""A class that encapsulates an experiment and its adaptive staircase."""	
-	def __init__(self, terrain, standard_position, distance, quest):
+	def __init__(self, id, terrain, standard_position, distance, quest):
+		self.id = id
 		self.terrain = terrain
 		self.standard_position = standard_position
 		self.distance = distance 
 		self.quest = quest
 		self.trials = 5
 		self.star = None
-		self.comparison_pole = None
 		self.standard_pole = None
+		self.comparison_pole = None
 		
 		
 	def setup(self, stimulus):
@@ -91,15 +90,27 @@ class Experiment:
 		self.comparison_pole = vizshape.addCylinder(POLE_HEIGHT, POLE_RADIUS)
 		self.standard_pole.texture(blue_texture)
 		self.comparison_pole.texture(blue_texture)
-		self.standard_pole.setPosition(STANDARD_POSITIONS[self.terrain])
-		self.comparison_pole.setPosition(COMPARISON_POSITIONS[self.terrain])
+		
+		self.standard_pole.setPosition(0, 1, self.distance)
+		self.standard_pole.setCenter(0, -1, -1 * self.distance)
+		self.comparison_pole.setPosition(0, 1, stimulus)
+		self.comparison_pole.setCenter(0, -1, -1 * stimulus)
+		
+		if (self.standard_position == Position.LEFT):
+			print("POSITION LEFT")
+			self.standard_pole.setAxisAngle(0, 1, 0, LEFT_ROTATIONS[self.terrain])
+			self.comparison_pole.setAxisAngle(0, 1, 0, RIGHT_ROTATIONS[self.terrain])
+		else:
+			print("POSITION RIGHT")
+			self.standard_pole.setAxisAngle(0, 1, 0, RIGHT_ROTATIONS[self.terrain])
+			self.comparison_pole.setAxisAngle(0, 1, 0, LEFT_ROTATIONS[self.terrain])
 		
 		
 	def teardown(self):
 		"""Clean up all objects associated with a run of experiment."""
 		self.star.remove()
-		self.comparison_pole.remove()
 		self.standard_pole.remove()
+		self.comparison_pole.remove()
 		
 	
 	def hasNext(self):
@@ -109,14 +120,13 @@ class Experiment:
 	
 	def next(self):
 		"""Returns the next stimulus."""
-		print(self.quest.marginal_posterior)
 		return self.quest.next_stim
 		
 		
 	def update(self, stimulus, outcome):
 		"""Update the staircase with a stimulus-response pair."""
 		self.trials -= 1
-		q.update(stim=stimulus, outcome=outcome)
+		self.quest.update(stim=stimulus, outcome=outcome)
 		
 	
 	def estimate(self):
@@ -173,7 +183,7 @@ def generateTerrain():
 	beach.texture(sand)
 	
 	
-def initQuest() -> qp.QuestPlus:
+def initQuest(standard_position) -> qp.QuestPlus:
 	"""Initialize and return a QuestPlus staircase."""
 	# Stimulus domain
 	distances = np.arange(start=3, stop=15, step=0.05)
@@ -190,7 +200,10 @@ def initQuest() -> qp.QuestPlus:
 		lapse_rate=lapse_rate)
 	
 	# Response domain
-	responses = [Position.LEFT, Position.RIGHT]
+	if (standard_position == Position.LEFT):
+		responses = [Position.LEFT, Position.RIGHT]
+	else:
+		responses = [Position.RIGHT, Position.LEFT]
 	outcome_domain = dict(response=responses)
 	
 	# Misc parameters
@@ -216,17 +229,18 @@ def runExperiments():
 	# Initialize experiments
 	experiments = []
 	distances = [7, 9, 11]
+	id = 0
 	for i in range(0, 2):
 		for terrain in Terrain:
 			for standard_position in Position:
 				for distance in distances:
-					quest = initQuest()
-					current = Experiment(terrain, standard_position, distance, quest)
+					quest = initQuest(standard_position)
+					current = Experiment(id, terrain, standard_position, distance, quest)
+					id += 1
 					experiments.append(current)
 	
 	done = False
 	while (not done):
-		yield viztask.waitTime(4)
 		# Check if all staircases exhausted
 		done = True
 		for e in experiments:
@@ -243,12 +257,29 @@ def runExperiments():
 		while (not experiment.hasNext()):
 			experiment = experiments[random.randint(0, len(experiments) - 1)]
 		
-		
 		# Perform experiment
-		experiment.setup(1)
-		yield viztask.waitTime(3)
+		stimulus = experiment.next()
+		experiment.setup(stimulus["intensity"])
+		
+		# Handle keypresses (wait for s, d, or q)
+		print(experiment.id)
+		yield viztask.waitKeyDown(('s', 'd', 'q'))
+		outcome = None
+		if (viz.key.isDown('s')):
+			outcome = Position.LEFT
+		elif (viz.key.isDown('d')):
+			outcome = Position.RIGHT
+		elif (viz.key.isDown('q')):
+			# TODO: handle quit key
+			print(experiment.distance)
+			print(experiment.estimate())
+			print("should exit here")
+			break
+		print(np.var(experiment.quest.marginal_posterior["threshold"]))
+			
+		experiment.update(stimulus, dict(response=outcome))
+		
 		experiment.teardown()
-		print(experiment.quest)
 
 
 def main():
@@ -257,6 +288,9 @@ def main():
 	viz.setMultiSample(4)
 	viz.MainView.collision(viz.ON)
 	viz.go()
+
+	# Ignore xarray deprecation warnings
+	warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 	"""
 	# Get subject info
