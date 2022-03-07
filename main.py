@@ -10,6 +10,7 @@ import time
 import questplus as qp
 import numpy as np
 import warnings
+import csv
 
 
 class Terrain(Enum):
@@ -61,7 +62,7 @@ LEFT_ROTATIONS = dict([
 	
 class Experiment:
 	"""A class that encapsulates an experiment and its adaptive staircase."""	
-	def __init__(self, id, terrain, standard_position, distance, quest):
+	def __init__(self, id, terrain, standard_position, distance, quest, log):
 		self.id = id
 		self.terrain = terrain
 		self.standard_position = standard_position
@@ -71,6 +72,7 @@ class Experiment:
 		self.star = None
 		self.standard_pole = None
 		self.comparison_pole = None
+		self.log = log
 		
 		
 	def setup(self, stimulus):
@@ -127,6 +129,7 @@ class Experiment:
 		"""Update the staircase with a stimulus-response pair."""
 		self.trials -= 1
 		self.quest.update(stim=stimulus, outcome=outcome)
+		self.log.writerow([self.id, self.trials, stimulus, outcome, self.estimate()])
 		
 	
 	def estimate(self):
@@ -183,10 +186,12 @@ def generateTerrain():
 	beach.texture(sand)
 	
 	
-def initQuest(standard_position) -> qp.QuestPlus:
+def initQuest(standard_position, distance) -> qp.QuestPlus:
 	"""Initialize and return a QuestPlus staircase."""
 	# Stimulus domain
-	distances = np.arange(start=3, stop=15, step=0.05)
+	lower_bound = distance / 2 - 1
+	upper_bound = distance * 2 + 1
+	distances = np.arange(start=lower_bound, stop=upper_bound, step=0.01)
 	stim_domain = dict(intensity=distances)
 	
 	# Parameter domain
@@ -224,7 +229,7 @@ def initQuest(standard_position) -> qp.QuestPlus:
 	return staircase
 	
 	
-def runExperiments():
+def runExperiments(log, csvfile):
 	"""Run each experiment until all are finished."""
 	# Initialize experiments
 	experiments = []
@@ -234,8 +239,8 @@ def runExperiments():
 		for terrain in Terrain:
 			for standard_position in Position:
 				for distance in distances:
-					quest = initQuest(standard_position)
-					current = Experiment(id, terrain, standard_position, distance, quest)
+					quest = initQuest(standard_position, distance)
+					current = Experiment(id, terrain, standard_position, distance, quest, log)
 					id += 1
 					experiments.append(current)
 	
@@ -262,7 +267,6 @@ def runExperiments():
 		experiment.setup(stimulus["intensity"])
 		
 		# Handle keypresses (wait for s, d, or q)
-		print(experiment.id)
 		yield viztask.waitKeyDown(('s', 'd', 'q'))
 		outcome = None
 		if (viz.key.isDown('s')):
@@ -280,6 +284,12 @@ def runExperiments():
 		experiment.update(stimulus, dict(response=outcome))
 		
 		experiment.teardown()
+		
+	csvfile.close()
+		
+		
+def handleViewIntersection():
+	pass
 
 
 def main():
@@ -292,29 +302,30 @@ def main():
 	# Ignore xarray deprecation warnings
 	warnings.filterwarnings("ignore", category=DeprecationWarning)
 
-	"""
 	# Get subject info
 	subject_number = viz.input("Please enter the subject number (0 for testing):")
 	print(subject_number)
-	subject_filename = str(subject_number) + "_data.txt"
-	data_directory = os.getcwd() + os.sep + "data"
-
-	content = viz.input("Type content")
-
-	more_content = viz.input("Type more content")
-
-	# Create file
-	file = open(subject_filename, "w")
-	file.write(content + "\n")
-	file.write(more_content)
-	file.close()
-	"""
+	subject_filename = str(subject_number) + "_data.csv"
+	data_directory = "data"
+	
+	# Create data directory if it does not exist
+	if (not os.path.exists(data_directory)):
+		os.makedirs(data_directory)
+	
+	# CSV logic
+	csvfile = open(data_directory + os.path.sep + subject_filename, 'w', newline='')
+	
+	log = csv.writer(csvfile)
 	
 	# Load terrain
 	generateTerrain()
 	
+	# Viewpoint intersection handler0
+	
+	#intersection_handler = viztask.schedule(handleViewIntersection())
+	
 	# Proceed until all staircases exhausted
-	experiment_runner = viztask.schedule(runExperiments())
+	experiment_runner = viztask.schedule(runExperiments(log, csvfile))
 
 
 if __name__ == "__main__":
