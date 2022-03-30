@@ -11,6 +11,7 @@ import questplus as qp
 import numpy as np
 import warnings
 import csv
+import universals
 
 
 class Terrain(Enum):
