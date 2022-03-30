@@ -35,7 +35,7 @@ def getNormalized(vec):
 	if mag:
 		return [x/mag for x in vec]
 	else:
-		print 'vector has zero-magnitude'
+		print('vector has zero-magnitude')
 		return vec
 
 # return u + v
@@ -264,7 +264,7 @@ def make_experiment_data_file(file_path, trial_list, file_name = 'trials.txt', p
 
 def make_trial_file(file_name, trial_list, key_order):
 	f = open(file_name,'w')
-	print 'Writing',len(trial_list),'trials to',file_name
+	print('Writing',len(trial_list),'trials to',file_name)
 	f.write(str(len(trial_list))+'\n')
 	for k in key_order:
 		f.write(k+DELIM)
@@ -277,7 +277,7 @@ def make_trial_file(file_name, trial_list, key_order):
 			else:
 				f.write(DELIM)
 		if t:
-			print 'Warning! Not saving information from trial:',t
+			print('Warning! Not saving information from trial:',t)
 		f.write('\n')
 	f.flush()
 	f.close()
@@ -285,7 +285,7 @@ def make_trial_file(file_name, trial_list, key_order):
 def read_trial_file(file_name):
 	f = open(file_name)
 	nt = int(f.readline().strip(DELIM+' \n'))
-	print 'Reading',nt,'trials from',file_name
+	print('Reading',nt,'trials from',file_name)
 	t = [{} for z in range(nt)]
 	keys = f.readline().strip(DELIM+' \n').split(DELIM)
 	nk = len(keys)
@@ -321,31 +321,31 @@ def open_experiment_data_file(file_path):
 	return trialList, practiceTrialList
 
 if __name__=='__main__':
-	print 'Running universals.py unit tests.'
-	print [0, 0, 3],project_point([0, 0, 0], [0, 0, 5], 3)
-	print [2, 0, 0],project_point([5, 0, 0], [0, 0, 0], 3)
-	print [2, 0, -2],project_point([-2, 0, 1], [2, 0, -2], 5)
+	print('Running universals.py unit tests.')
+	print([0, 0, 3],project_point([0, 0, 0], [0, 0, 5], 3))
+	print([2, 0, 0],project_point([5, 0, 0], [0, 0, 0], 3))
+	print([2, 0, -2],project_point([-2, 0, 1], [2, 0, -2], 5))
 	
-	print '\nvector operations unit tests'
-	print [-1,-4,-9], vectorSubtract([1, 0, -1],[2, 4, 8])
-	print [3,5,7], vectorSubtract([3,4,5],[0,-1,-2])
+	print('\nvector operations unit tests')
+	print([-1,-4,-9], vectorSubtract([1, 0, -1],[2, 4, 8]))
+	print([3,5,7], vectorSubtract([3,4,5],[0,-1,-2]))
 	
-	print 12, dotProduct([1,1,1],[3,4,5])
-	print 26, dotProduct([-1,4,0],[2,7,-3])
+	print(12, dotProduct([1,1,1],[3,4,5]))
+	print(26, dotProduct([-1,4,0],[2,7,-3]))
 	
-	print [-1,0,1], vectorReflect([1,0,1],[0,0,-1])
+	print([-1,0,1], vectorReflect([1,0,1],[0,0,-1]))
 	
-	print '\nperpDistanceToVector unit tests'
-	print '(3,True)', perpDistanceToVector([-1,0,3],[4,0,0],[0,0,0])
-	print '(4,True)', perpDistanceToVector([5,0,-4],[4,0,0],[0,0,0])
-	print '(0,False)', perpDistanceToVector([2,0,0],[4,0,0],[0,0,0])
+	print('\nperpDistanceToVector unit tests')
+	print('(3,True)', perpDistanceToVector([-1,0,3],[4,0,0],[0,0,0]))
+	print('(4,True)', perpDistanceToVector([5,0,-4],[4,0,0],[0,0,0]))
+	print('(0,False)', perpDistanceToVector([2,0,0],[4,0,0],[0,0,0]))
 
-	print '\ncheckPathProximity unit tests'
+	print('\ncheckPathProximity unit tests')
 	temp_path = [[1,0,1],[1,0,8],[8,0,12],[15,0,1]]
-	print True, checkPathProximity([10,0,2],temp_path, 2, True)
-	print False, checkPathProximity([10,0,2],temp_path, 2, False)	
-	print False, checkPathProximity([10,0,3],temp_path, 2, True)
+	print(True, checkPathProximity([10,0,2],temp_path, 2, True))
+	print(False, checkPathProximity([10,0,2],temp_path, 2, False))
+	print(False, checkPathProximity([10,0,3],temp_path, 2, True))
 	
 	temp_path = [[1,0,1],[1,0,8],[8,0,12],[15,0,1],[1,0,1]]
-	print True, checkPathProximity([2,0,0],temp_path, 2, True)
-	print True, checkPathProximity([2,0,0],temp_path, 2, False)	
+	print(True, checkPathProximity([2,0,0],temp_path, 2, True))
+	print(True, checkPathProximity([2,0,0],temp_path, 2, False))

@@ -11,7 +11,7 @@ import questplus as qp
 import numpy as np
 import warnings
 import csv
-import universals
+from universals import facing
 
 
 class Terrain(Enum):
@@ -75,9 +75,28 @@ class Experiment:
 		self.comparison_pole = None
 		self.log = log
 		
+	def removeStar(self) -> None:
+		"""Remove the star object if it has been instantiated."""
+		STAR_VIEW_TIME = 2
+		if (self.star != None):
+			yield viztask.waitTime(STAR_VIEW_TIME)
+			self.star.remove()
+		
+		
+	def waitUntilFacingStarThenRemove(self) -> None:
+		"""Wait until user is looking at star and then remove star."""
+		POLL_DELAY = 0.1
+		VIEW_ANGLE_THRESHOLD = 60
+		while (True):
+			yaw, _, _ = viz.MainView.getEuler()
+			if (facing(viz.MainView.getPosition(), self.star.getPosition(), yaw, VIEW_ANGLE_THRESHOLD)):
+				viztask.schedule(self.removeStar())
+				return
+			yield viztask.waitTime(POLL_DELAY)
+		
 		
 	def setup(self, stimulus):
-		"""Sets up the scene with the comparison pole at the specified distance."""
+		"""Sets up the scene with the comparison pole at the specified distance, waits for the user to look at the star, and then removes the star."""
 		# Display star
 		self.star = viz.add('./models/star/scene.gltf')
 		self.star.setPosition(STAR_POSITIONS[self.terrain])
@@ -107,6 +126,8 @@ class Experiment:
 			print("POSITION RIGHT")
 			self.standard_pole.setAxisAngle(0, 1, 0, RIGHT_ROTATIONS[self.terrain])
 			self.comparison_pole.setAxisAngle(0, 1, 0, LEFT_ROTATIONS[self.terrain])
+			
+		viztask.schedule(self.waitUntilFacingStarThenRemove())
 		
 		
 	def teardown(self):
