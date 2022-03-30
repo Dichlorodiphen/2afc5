@@ -14,6 +14,10 @@ import csv
 from universals import facing
 
 
+# TODO: aggregate parameters into a separate file
+TRIALS_PER_STAIRCASE = 5
+
+
 class Terrain(Enum):
 	"""An enum to describe the terrain conditions."""
 	SAND_FIRM = 0
@@ -69,11 +73,12 @@ class Experiment:
 		self.standard_position = standard_position
 		self.distance = distance 
 		self.quest = quest
-		self.trials = 5
+		self.trials = TRIALS_PER_STAIRCASE
 		self.star = None
 		self.standard_pole = None
 		self.comparison_pole = None
 		self.log = log
+		
 		
 	def removeStar(self) -> None:
 		"""Remove the star object if it has been instantiated."""
@@ -151,7 +156,7 @@ class Experiment:
 		"""Update the staircase with a stimulus-response pair."""
 		self.trials -= 1
 		self.quest.update(stim=stimulus, outcome=outcome)
-		self.log.writerow([self.id, self.trials, stimulus, outcome, self.estimate()])
+		self.log.writerow([self.id, TRIALS_PER_STAIRCASE - self.trials, self.terrain, self.standard_position, self.distance, stimulus, outcome, self.estimate(), viz.MainView.getEuler()])
 		
 	
 	def estimate(self):
@@ -338,6 +343,7 @@ def main():
 	csvfile = open(data_directory + os.path.sep + subject_filename, 'w', newline='')
 	
 	log = csv.writer(csvfile)
+	log.writerow(["ID", "Trial", "Terrain", "Standard Position", "Standard Distance", "Comparison Distance", "Input", "Threshold Estimate", "View Orientation"])
 	
 	# Load terrain
 	generateTerrain()
