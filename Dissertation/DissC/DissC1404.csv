@@ -1,0 +1,128 @@
+  1,11.0,3.10,45.0,45.0,1,2,2,1,3,1,sand,firm,sand incongruent 
+  2,5.0,12.62,45.0,135.0,1,4,2,2,4,2,sand,sand,sand   congruent 
+  3,5.0,8.73,135.0,45.0,3,2,1,1,4,2,firm,firm,firm   congruent 
+  4,9.0,12.12,45.0,135.0,2,3,1,1,4,2,firm,firm,firm   congruent 
+  5,9.0,6.78,45.0,45.0,1,2,2,1,1,4,sand,firm,sand incongruent 
+  6,7.0,3.75,45.0,135.0,2,3,1,1,1,2,firm,firm,firm   congruent 
+  7,5.0,5.55,45.0,45.0,2,1,1,2,1,4,firm,sand,firm incongruent 
+  8,5.0,4.82,45.0,45.0,2,1,1,2,1,2,firm,sand,firm incongruent 
+  9,7.0,10.60,45.0,45.0,1,2,2,1,1,3,sand,firm,sand incongruent 
+ 10,9.0,7.36,45.0,45.0,2,1,1,2,4,3,firm,sand,firm incongruent 
+ 11,11.0,8.28,45.0,135.0,1,4,2,2,4,2,sand,sand,sand   congruent 
+ 12,7.0,4.50,45.0,135.0,2,3,1,1,3,1,firm,firm,firm   congruent 
+ 13,11.0,3.17,45.0,135.0,2,3,1,1,1,2,firm,firm,firm   congruent 
+ 14,5.0,9.67,135.0,45.0,3,2,1,1,4,1,firm,firm,firm   congruent 
+ 15,5.0,6.13,45.0,45.0,1,2,2,1,3,1,sand,firm,sand incongruent 
+ 16,7.0,6.59,45.0,45.0,2,1,1,2,1,4,firm,sand,firm incongruent 
+ 17,9.0,7.85,45.0,135.0,2,3,1,1,3,2,firm,firm,firm   congruent 
+ 18,11.0,3.24,45.0,45.0,2,1,1,2,1,3,firm,sand,firm incongruent 
+ 19,9.0,9.38,135.0,45.0,4,1,2,2,4,1,sand,sand,sand   congruent 
+ 20,5.0,9.76,45.0,135.0,1,4,2,2,4,2,sand,sand,sand   congruent 
+ 21,11.0,5.41,135.0,45.0,3,2,1,1,4,2,firm,firm,firm   congruent 
+ 22,11.0,3.69,45.0,45.0,1,2,2,1,4,3,sand,firm,sand incongruent 
+ 23,9.0,9.60,45.0,45.0,1,2,2,1,1,2,sand,firm,sand incongruent 
+ 24,5.0,9.17,45.0,135.0,2,3,1,1,1,2,firm,firm,firm   congruent 
+ 25,11.0,9.58,45.0,45.0,1,2,2,1,4,3,sand,firm,sand incongruent 
+ 26,7.0,7.07,45.0,45.0,1,2,2,1,1,3,sand,firm,sand incongruent 
+ 27,5.0,10.99,45.0,45.0,2,1,1,2,4,1,firm,sand,firm incongruent 
+ 28,7.0,8.45,45.0,135.0,2,3,1,1,2,1,firm,firm,firm   congruent 
+ 29,9.0,6.88,45.0,135.0,1,4,2,2,4,2,sand,sand,sand   congruent 
+ 30,5.0,3.40,45.0,45.0,2,1,1,2,4,1,firm,sand,firm incongruent 
+ 31,9.0,9.06,135.0,45.0,3,2,1,1,1,3,firm,firm,firm   congruent 
+ 32,11.0,8.31,45.0,45.0,2,1,1,2,1,3,firm,sand,firm incongruent 
+ 33,11.0,4.26,135.0,45.0,3,2,1,1,4,2,firm,firm,firm   congruent 
+ 34,7.0,3.75,45.0,45.0,1,2,2,1,3,2,sand,firm,sand incongruent 
+ 35,9.0,8.77,135.0,45.0,3,2,1,1,1,2,firm,firm,firm   congruent 
+ 36,5.0,12.26,45.0,45.0,1,2,2,1,4,2,sand,firm,sand incongruent 
+ 37,5.0,3.57,135.0,45.0,3,2,1,1,1,2,firm,firm,firm   congruent 
+ 38,7.0,12.34,45.0,45.0,2,1,1,2,4,3,firm,sand,firm incongruent 
+ 39,5.0,10.12,45.0,45.0,2,1,1,2,1,2,firm,sand,firm incongruent 
+ 40,9.0,9.22,135.0,45.0,3,2,1,1,4,3,firm,firm,firm   congruent 
+ 41,7.0,9.45,135.0,45.0,4,1,2,2,1,2,sand,sand,sand   congruent 
+ 42,9.0,6.73,45.0,135.0,1,4,2,2,2,1,sand,sand,sand   congruent 
+ 43,9.0,9.65,45.0,45.0,2,1,1,2,2,1,firm,sand,firm incongruent 
+ 44,7.0,10.79,45.0,45.0,1,2,2,1,3,2,sand,firm,sand incongruent 
+ 45,9.0,4.07,45.0,45.0,1,2,2,1,1,3,sand,firm,sand incongruent 
+ 46,5.0,4.60,45.0,45.0,1,2,2,1,2,3,sand,firm,sand incongruent 
+ 47,9.0,4.25,45.0,45.0,1,2,2,1,2,4,sand,firm,sand incongruent 
+ 48,9.0,12.83,45.0,45.0,2,1,1,2,4,2,firm,sand,firm incongruent 
+ 49,5.0,5.61,135.0,45.0,4,1,2,2,2,4,sand,sand,sand   congruent 
+ 50,9.0,8.19,135.0,45.0,3,2,1,1,1,4,firm,firm,firm   congruent 
+ 51,5.0,3.30,45.0,135.0,2,3,1,1,3,2,firm,firm,firm   congruent 
+ 52,7.0,3.66,45.0,45.0,2,1,1,2,3,2,firm,sand,firm incongruent 
+ 53,7.0,11.59,45.0,45.0,1,2,2,1,3,1,sand,firm,sand incongruent 
+ 54,11.0,11.81,45.0,135.0,2,3,1,1,2,4,firm,firm,firm   congruent 
+ 55,11.0,4.63,135.0,45.0,4,1,2,2,1,3,sand,sand,sand   congruent 
+ 56,9.0,5.17,135.0,45.0,4,1,2,2,1,3,sand,sand,sand   congruent 
+ 57,9.0,6.49,45.0,135.0,2,3,1,1,3,2,firm,firm,firm   congruent 
+ 58,7.0,12.68,135.0,45.0,4,1,2,2,4,1,sand,sand,sand   congruent 
+ 59,7.0,9.07,45.0,135.0,1,4,2,2,2,3,sand,sand,sand   congruent 
+ 60,5.0,12.95,45.0,135.0,2,3,1,1,1,3,firm,firm,firm   congruent 
+ 61,7.0,11.98,135.0,45.0,4,1,2,2,1,2,sand,sand,sand   congruent 
+ 62,7.0,11.27,135.0,45.0,3,2,1,1,1,2,firm,firm,firm   congruent 
+ 63,9.0,11.38,45.0,45.0,1,2,2,1,3,2,sand,firm,sand incongruent 
+ 64,11.0,11.11,45.0,45.0,2,1,1,2,3,1,firm,sand,firm incongruent 
+ 65,5.0,3.29,45.0,135.0,2,3,1,1,2,1,firm,firm,firm   congruent 
+ 66,11.0,9.82,135.0,45.0,3,2,1,1,2,1,firm,firm,firm   congruent 
+ 67,9.0,9.24,45.0,45.0,1,2,2,1,1,4,sand,firm,sand incongruent 
+ 68,9.0,10.34,45.0,45.0,2,1,1,2,4,3,firm,sand,firm incongruent 
+ 69,7.0,5.00,45.0,45.0,1,2,2,1,3,2,sand,firm,sand incongruent 
+ 70,9.0,11.97,45.0,45.0,2,1,1,2,2,4,firm,sand,firm incongruent 
+ 71,7.0,4.21,135.0,45.0,4,1,2,2,1,3,sand,sand,sand   congruent 
+ 72,9.0,10.42,45.0,45.0,2,1,1,2,4,1,firm,sand,firm incongruent 
+ 73,5.0,9.13,45.0,135.0,1,4,2,2,3,4,sand,sand,sand   congruent 
+ 74,5.0,9.07,45.0,45.0,1,2,2,1,1,4,sand,firm,sand incongruent 
+ 75,5.0,6.79,45.0,45.0,1,2,2,1,3,1,sand,firm,sand incongruent 
+ 76,7.0,11.75,45.0,135.0,1,4,2,2,1,2,sand,sand,sand   congruent 
+ 77,11.0,3.58,45.0,135.0,1,4,2,2,1,3,sand,sand,sand   congruent 
+ 78,7.0,11.39,135.0,45.0,3,2,1,1,4,2,firm,firm,firm   congruent 
+ 79,9.0,4.53,135.0,45.0,4,1,2,2,3,2,sand,sand,sand   congruent 
+ 80,7.0,8.97,45.0,45.0,2,1,1,2,1,3,firm,sand,firm incongruent 
+ 81,9.0,12.93,45.0,45.0,2,1,1,2,4,2,firm,sand,firm incongruent 
+ 82,11.0,12.49,45.0,135.0,1,4,2,2,4,1,sand,sand,sand   congruent 
+ 83,11.0,4.39,45.0,45.0,2,1,1,2,4,3,firm,sand,firm incongruent 
+ 84,11.0,12.43,135.0,45.0,4,1,2,2,1,4,sand,sand,sand   congruent 
+ 85,9.0,7.41,45.0,135.0,1,4,2,2,1,2,sand,sand,sand   congruent 
+ 86,5.0,8.68,135.0,45.0,4,1,2,2,3,4,sand,sand,sand   congruent 
+ 87,11.0,7.05,45.0,45.0,2,1,1,2,2,3,firm,sand,firm incongruent 
+ 88,11.0,4.06,135.0,45.0,4,1,2,2,2,3,sand,sand,sand   congruent 
+ 89,7.0,4.48,45.0,135.0,2,3,1,1,1,2,firm,firm,firm   congruent 
+ 90,7.0,10.33,135.0,45.0,3,2,1,1,1,4,firm,firm,firm   congruent 
+ 91,11.0,7.46,135.0,45.0,3,2,1,1,4,3,firm,firm,firm   congruent 
+ 92,11.0,3.73,45.0,45.0,1,2,2,1,4,2,sand,firm,sand incongruent 
+ 93,9.0,12.83,45.0,135.0,2,3,1,1,1,3,firm,firm,firm   congruent 
+ 94,5.0,7.98,135.0,45.0,4,1,2,2,2,4,sand,sand,sand   congruent 
+ 95,11.0,6.51,45.0,135.0,2,3,1,1,4,1,firm,firm,firm   congruent 
+ 96,5.0,11.81,45.0,45.0,1,2,2,1,3,1,sand,firm,sand incongruent 
+ 97,5.0,5.14,45.0,45.0,2,1,1,2,2,1,firm,sand,firm incongruent 
+ 98,11.0,3.56,45.0,45.0,1,2,2,1,1,3,sand,firm,sand incongruent 
+ 99,11.0,11.82,45.0,135.0,1,4,2,2,2,1,sand,sand,sand   congruent 
+100,7.0,9.50,45.0,45.0,2,1,1,2,1,4,firm,sand,firm incongruent 
+101,5.0,7.28,45.0,135.0,1,4,2,2,4,3,sand,sand,sand   congruent 
+102,9.0,11.77,135.0,45.0,4,1,2,2,4,2,sand,sand,sand   congruent 
+103,11.0,5.18,135.0,45.0,4,1,2,2,2,1,sand,sand,sand   congruent 
+104,7.0,3.90,45.0,45.0,1,2,2,1,2,1,sand,firm,sand incongruent 
+105,11.0,9.08,45.0,45.0,1,2,2,1,2,4,sand,firm,sand incongruent 
+106,11.0,12.35,45.0,45.0,2,1,1,2,2,1,firm,sand,firm incongruent 
+107,11.0,5.53,45.0,45.0,2,1,1,2,2,1,firm,sand,firm incongruent 
+108,7.0,7.21,45.0,45.0,2,1,1,2,3,4,firm,sand,firm incongruent 
+109,5.0,12.59,45.0,45.0,2,1,1,2,2,1,firm,sand,firm incongruent 
+110,7.0,12.62,135.0,45.0,3,2,1,1,1,4,firm,firm,firm   congruent 
+111,9.0,10.67,45.0,45.0,1,2,2,1,3,4,sand,firm,sand incongruent 
+112,5.0,5.46,135.0,45.0,4,1,2,2,2,3,sand,sand,sand   congruent 
+113,5.0,11.07,45.0,45.0,1,2,2,1,1,2,sand,firm,sand incongruent 
+114,7.0,5.67,45.0,135.0,1,4,2,2,4,1,sand,sand,sand   congruent 
+115,7.0,12.66,45.0,45.0,2,1,1,2,1,4,firm,sand,firm incongruent 
+116,11.0,10.40,45.0,135.0,2,3,1,1,1,2,firm,firm,firm   congruent 
+117,11.0,3.91,45.0,45.0,1,2,2,1,1,2,sand,firm,sand incongruent 
+118,7.0,3.53,45.0,135.0,1,4,2,2,1,4,sand,sand,sand   congruent 
+119,5.0,6.09,45.0,45.0,2,1,1,2,3,4,firm,sand,firm incongruent 
+120,11.0,8.76,45.0,45.0,1,2,2,1,2,1,sand,firm,sand incongruent 
+121,9.0,7.00,45.0,45.0,2,1,1,2,1,3,firm,sand,firm incongruent 
+122,9.0,3.37,45.0,135.0,1,4,2,2,4,3,sand,sand,sand   congruent 
+123,5.0,4.48,135.0,45.0,3,2,1,1,1,3,firm,firm,firm   congruent 
+124,9.0,3.92,45.0,45.0,1,2,2,1,4,1,sand,firm,sand incongruent 
+125,5.0,3.89,45.0,45.0,1,2,2,1,3,2,sand,firm,sand incongruent 
+126,11.0,10.70,45.0,45.0,2,1,1,2,2,4,firm,sand,firm incongruent 
+127,7.0,6.47,45.0,45.0,2,1,1,2,4,1,firm,sand,firm incongruent 
+128,7.0,7.82,45.0,45.0,1,2,2,1,2,4,sand,firm,sand incongruent 
