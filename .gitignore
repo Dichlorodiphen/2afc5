@@ -3,3 +3,6 @@ reference/
 data/
 __pycache__/
 
+# Models and textures
+models/
+textures/
