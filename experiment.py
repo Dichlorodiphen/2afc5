@@ -12,6 +12,8 @@ import numpy as np
 import warnings
 import csv
 from universals import facing
+import oculus
+import steamvr
 
 
 # TODO: aggregate parameters into a separate file
@@ -80,7 +82,7 @@ class Experiment:
 		self.log = log
 		
 		
-	def removeStar(self) -> None:
+	def removeStar(self):
 		"""Remove the star object if it has been instantiated."""
 		STAR_VIEW_TIME = 2
 		if (self.star != None):
@@ -88,7 +90,7 @@ class Experiment:
 			self.star.remove()
 		
 		
-	def waitUntilFacingStarThenRemove(self) -> None:
+	def waitUntilFacingStarThenRemove(self):
 		"""Wait until user is looking at star and then remove star."""
 		POLL_DELAY = 0.1
 		VIEW_ANGLE_THRESHOLD = 60
@@ -213,7 +215,7 @@ def generateTerrain():
 	beach.texture(sand)
 	
 	
-def initQuest(standard_position, distance) -> qp.QuestPlus:
+def initQuest(standard_position, distance):
 	"""Initialize and return a QuestPlus staircase."""
 	# Stimulus domain
 	lower_bound = distance / 2 - 1
@@ -256,7 +258,7 @@ def initQuest(standard_position, distance) -> qp.QuestPlus:
 	return staircase
 	
 	
-def runExperiments(log, csvfile):
+def runExperiments(log, csvfile, controller):
 	"""Run each experiment until all are finished."""
 	# Initialize experiments
 	experiments = []
@@ -293,12 +295,33 @@ def runExperiments(log, csvfile):
 		stimulus = experiment.next()
 		experiment.setup(stimulus["intensity"])
 		
+		## Handle keypresses (wait for s, d, or q)
+		#yield viztask.waitKeyDown(('s', 'd', 'q'))
+		#outcome = None
+		#if (viz.key.isDown('s')):
+		#	outcome = Position.LEFT
+		#elif (viz.key.isDown('d')):
+		#	outcome = Position.RIGHT
+		#elif (viz.key.isDown('q')):
+		#	# TODO: handle quit key
+		#	print(experiment.distance)
+		#	print(experiment.estimate())
+		#	print("should exit here")
+		#	break
+		
 		# Handle keypresses (wait for s, d, or q)
-		yield viztask.waitKeyDown(('s', 'd', 'q'))
+		# Key IDs:
+		# 2 - trigger
+		# 1 - button on back
+		conditions = [
+			viztask.waitTrue(controller.isButtonDown, 2),
+			viztask.waitTrue(controller.isButtonDown, 1)
+		]
+		yield viztask.waitAny(conditions)	
 		outcome = None
-		if (viz.key.isDown('s')):
+		if (controller.isButtonDown(2)):
 			outcome = Position.LEFT
-		elif (viz.key.isDown('d')):
+		elif (controller.isButtonDown(1)):
 			outcome = Position.RIGHT
 		elif (viz.key.isDown('q')):
 			# TODO: handle quit key
@@ -306,6 +329,7 @@ def runExperiments(log, csvfile):
 			print(experiment.estimate())
 			print("should exit here")
 			break
+			
 		print(np.var(experiment.quest.marginal_posterior["threshold"]))
 			
 		experiment.update(stimulus, dict(response=outcome))
@@ -319,12 +343,17 @@ def handleViewIntersection():
 	pass
 
 
-def main():
-	# Start rendering
-	viz.MainWindow.fov(60)
-	viz.setMultiSample(4)
-	viz.MainView.collision(viz.ON)
-	viz.go()
+def startExperiment(signal, controller):
+	## Controller setup
+	#ODTracker = steamvr.HMD().getSensor()
+	#link = viz.link(ODTracker, viz.MainView)
+	#for controller in steamvr.getControllerList():
+	#	controller = controller
+	
+	## Start rendering
+	#viz.go()
+	
+	yield signal.wait()
 
 	# Ignore xarray deprecation warnings
 	warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -353,7 +382,7 @@ def main():
 	#intersection_handler = viztask.schedule(handleViewIntersection())
 	
 	# Proceed until all staircases exhausted
-	experiment_runner = viztask.schedule(runExperiments(log, csvfile))
+	experiment_runner = viztask.schedule(runExperiments(log, csvfile, controller))
 
 
 if __name__ == "__main__":
